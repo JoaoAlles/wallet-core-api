@@ -1,5 +1,6 @@
 package com.wallet.core.api.controller;
 
+import com.wallet.core.api.dto.UserResponseDTO;
 import com.wallet.core.domain.entity.User;
 import com.wallet.core.domain.repository.UserRepository;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +20,8 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> create(@RequestBody User user) {
+    public ResponseEntity<UserResponseDTO> create(@RequestBody User user) {
         User savedUser = userRepository.save(user);
-        return ResponseEntity.ok(savedUser);
+        return ResponseEntity.ok(UserResponseDTO.fromEntity(savedUser));
     }
 }
