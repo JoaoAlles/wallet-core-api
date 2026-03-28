@@ -11,6 +11,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+
 @RestController
 @RequestMapping("/api/transactions")
 public class TransactionController {
@@ -33,6 +35,12 @@ public class TransactionController {
     public ResponseEntity<Page<Transaction>> findAll(
             @PageableDefault(size = 10, sort = "timestamp", direction = Sort.Direction.DESC) Pageable pageable) {
         return ResponseEntity.ok(transactionRepository.findAll(pageable));
+    }
+
+    @GetMapping("/total-expenses/{userId}")
+    public ResponseEntity<BigDecimal> getTotalExpenses(@PathVariable Long userId) {
+        BigDecimal data = transactionService.getTotalExpenses(userId);
+        return ResponseEntity.ok(data);
     }
 
 }

@@ -11,6 +11,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class TransactionService {
@@ -51,6 +52,15 @@ public class TransactionService {
         transaction.setTimestamp(LocalDateTime.now());
 
         transactionRepository.save(transaction);
+    }
+
+    public BigDecimal getTotalExpenses(Long userId) {
+        List<Transaction> transactions = transactionRepository.findAll();
+        return transactions.stream()
+                .filter(t -> t.getUser().getId().equals(userId))
+                .filter(t -> "EXPENSE".equals(t.getType()))
+                .map(Transaction::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     private static BigDecimal getBigDecimal(TransactionRequestDTO data, User user, BigDecimal amount) {
