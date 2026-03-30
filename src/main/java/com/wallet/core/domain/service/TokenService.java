@@ -3,6 +3,7 @@ package com.wallet.core.domain.service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.wallet.core.domain.entity.User;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,19 @@ public class TokenService {
                     .sign(algorithm);
         } catch (JWTCreationException exception) {
             throw new RuntimeException("Error while generating token", exception);
+        }
+    }
+
+    public String validateToken(String token) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(secret);
+            return JWT.require(algorithm)
+                    .withIssuer("wallet-core-api")
+                    .build()
+                    .verify(token)
+                    .getSubject();
+        } catch (JWTVerificationException exception) {
+            return "";
         }
     }
 

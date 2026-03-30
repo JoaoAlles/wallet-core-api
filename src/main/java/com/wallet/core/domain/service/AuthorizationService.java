@@ -1,6 +1,5 @@
 package com.wallet.core.domain.service;
 
-import com.wallet.core.domain.entity.User;
 import com.wallet.core.domain.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,20 +9,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthorizationService implements UserDetailsService {
 
-    private final UserRepository repository;
+    private final UserRepository userRepository;
 
-    public AuthorizationService(UserRepository repository) {
-        this.repository = repository;
+    public AuthorizationService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = repository.findByEmail(username);
-        if (user == null) throw new UsernameNotFoundException("User not found");
-
-        return org.springframework.security.core.userdetails.User
-                .withUsername(user.getEmail())
-                .password(user.getPassword())
-                .build();
+        UserDetails user = userRepository.findByEmail(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found with email: " + username);
+        }
+        return user;
     }
 }
