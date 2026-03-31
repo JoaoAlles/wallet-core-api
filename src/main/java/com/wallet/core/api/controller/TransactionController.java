@@ -44,4 +44,10 @@ public class TransactionController {
         return ResponseEntity.ok(data);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        transactionRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }
