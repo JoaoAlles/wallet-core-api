@@ -4,6 +4,7 @@ import com.wallet.core.api.dto.TransactionRequestDTO;
 import com.wallet.core.domain.entity.Transaction;
 import com.wallet.core.domain.repository.TransactionRepository;
 import com.wallet.core.domain.service.TransactionService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -26,7 +27,7 @@ public class TransactionController {
     }
 
     @PostMapping
-    public ResponseEntity<String> create(@RequestBody TransactionRequestDTO data) {
+    public ResponseEntity<String> create(@Valid @RequestBody TransactionRequestDTO data) {
         transactionService.createTransaction(data);
         return ResponseEntity.ok("Transaction created successfully!");
     }
