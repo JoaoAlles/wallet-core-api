@@ -1,6 +1,6 @@
 # Wallet Core API 🚀
 
-Financial management API for personal wallet control, built with **Java 21** and **Spring Boot 3**. This project was designed to showcase robust backend development skills, focusing on financial rules, security, and performance.
+Financial management API for personal wallet control, built with **Java 21** (LTS) and **Spring Boot 3**. This project was designed to showcase robust backend development skills, focusing on financial rules, security, and performance.
 
 ## 🛠 Technologies
 - **Java 21** (LTS)
@@ -9,11 +9,14 @@ Financial management API for personal wallet control, built with **Java 21** and
 - **Spring Data JPA** with **Hibernate**
 - **PostgreSQL**
 - **Lombok** (Boilerplate reduction)
+- **Jakarta Bean Validation** (Fail-fast validation)
 - **Maven** (Dependency management)
 
 ## 🧠 Key Features & Architecture
 - **Financial Core Logic**: Precise calculations using `BigDecimal` to avoid binary rounding errors in currency operations.
 - **Robust Security**: Stateless authentication using JWT and BCrypt password hashing.
+- **Audit Capability (Soft Delete)**: Automatic filtering of deleted records using `@SQLDelete` and `@Where` for high-integrity financial auditing.
+- **Fail-Fast Validation**: Declarative input validation using `@Valid` and Bean Validation constraints (@Positive, @NotBlank).
 - **Optimized Data Layer**: Custom JPQL queries for high-performance financial reporting (Total Expenses).
 - **Clean Architecture**: Organized into `controller`, `service`, `repository`, `entity`, and `dto` layers for high maintainability.
 - **Global Exception Handling**: Professional error management returning standardized JSON responses for better API UX.
@@ -28,6 +31,7 @@ Financial management API for personal wallet control, built with **Java 21** and
 | **POST** | `/api/transactions` | Create a new transaction (Income/Expense) | Private |
 | **GET** | `/api/transactions` | List paginated transaction history | Private |
 | **GET** | `/api/transactions/total-expenses/{userId}` | Get total expenses for a specific user | Private |
+| **DELETE** | `/api/transactions/{id}` | Soft delete a transaction (Audit safe) | Private |
 
 ## ⚙️ How to Run
 1. Clone the repository.
