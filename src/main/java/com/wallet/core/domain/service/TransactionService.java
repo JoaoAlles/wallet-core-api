@@ -55,12 +55,8 @@ public class TransactionService {
     }
 
     public BigDecimal getTotalExpenses(Long userId) {
-        List<Transaction> transactions = transactionRepository.findAll();
-        return transactions.stream()
-                .filter(t -> t.getUser().getId().equals(userId))
-                .filter(t -> "EXPENSE".equals(t.getType()))
-                .map(Transaction::getAmount)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal total = transactionRepository.sumTotalExpensesByUserId(userId);
+        return total != null ? total : BigDecimal.ZERO;
     }
 
     private static BigDecimal getBigDecimal(TransactionRequestDTO data, User user, BigDecimal amount) {
