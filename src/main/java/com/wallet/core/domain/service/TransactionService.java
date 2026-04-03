@@ -1,5 +1,6 @@
 package com.wallet.core.domain.service;
 
+import com.wallet.core.api.dto.DashboardDTO;
 import com.wallet.core.api.dto.TransactionRequestDTO;
 import com.wallet.core.domain.entity.Category;
 import com.wallet.core.domain.entity.Transaction;
@@ -11,7 +12,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 public class TransactionService {
@@ -57,6 +57,21 @@ public class TransactionService {
     public BigDecimal getTotalExpenses(Long userId) {
         BigDecimal total = transactionRepository.sumTotalExpensesByUserId(userId);
         return total != null ? total : BigDecimal.ZERO;
+    }
+
+    public DashboardDTO getDashboard(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        BigDecimal currentBalance = user.getBalance();
+        BigDecimal totalExpenses = transactionRepository.sumTotalExpensesByUserId(userId);
+        BigDecimal totalIncomes = transactionRepository.sumTotalIncomeByUserId(userId);
+
+        return new DashboardDTO(
+                currentBalance,
+                totalIncomes != null ? totalIncomes : BigDecimal.ZERO,
+                totalExpenses != null ? totalExpenses : BigDecimal.ZERO
+        );
     }
 
     private static BigDecimal getBigDecimal(TransactionRequestDTO data, User user, BigDecimal amount) {

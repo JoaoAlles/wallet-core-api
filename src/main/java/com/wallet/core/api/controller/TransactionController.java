@@ -1,5 +1,6 @@
 package com.wallet.core.api.controller;
 
+import com.wallet.core.api.dto.DashboardDTO;
 import com.wallet.core.api.dto.TransactionRequestDTO;
 import com.wallet.core.domain.entity.Transaction;
 import com.wallet.core.domain.repository.TransactionRepository;
@@ -42,6 +43,11 @@ public class TransactionController {
     public ResponseEntity<BigDecimal> getTotalExpenses(@PathVariable Long userId) {
         BigDecimal data = transactionService.getTotalExpenses(userId);
         return ResponseEntity.ok(data);
+    }
+
+    @GetMapping("/get-dashboard/{userId}")
+    public ResponseEntity<DashboardDTO> getDashboard(@PathVariable Long userId) {
+        return ResponseEntity.ok(transactionService.getDashboard(userId));
     }
 
     @DeleteMapping("/{id}")
